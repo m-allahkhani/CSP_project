@@ -24,10 +24,10 @@ class Solver:
     def solve(self):
         self.problem.calculate_neighbors()
         start = time.time()
-        for var in self.problem.variables:
-            if not self.forward_check(var):
-                print("Problem Unsolvable")
-                return
+        # for var in self.problem.variables:
+        #     if not self.forward_check(var):
+        #         print("Problem Unsolvable")
+        #         return
         result = self.backtracking()
         end = time.time()
         time_elapsed = (end - start) * 1000
@@ -38,8 +38,18 @@ class Solver:
 
 
     def backtracking(self):
-        pass
-        # Write your code here
+        var = self.select_unassigned_variable()
+        if var is None:
+            return True
+        for value in var.domain:
+            var.value = value
+            if self.is_consistent(var) is True:
+                result = self.backtracking()
+                if result is True:
+                    return True
+            var._has_value = False
+            var.value = None
+        return False
 
     def forward_check(self, var):
         pass
@@ -61,8 +71,10 @@ class Solver:
         # Write your code here
 
     def is_consistent(self, var: Variable):
-        pass
-        # Write your code here
+        for con in self.problem.get_neighbor_constraints(var):
+            if con.is_satisfied() is False:
+                return False
+        return True
 
 
     def lcv(self, var: Variable):
