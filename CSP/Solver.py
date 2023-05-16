@@ -42,8 +42,21 @@ class Solver:
         # Write your code here
 
     def forward_check(self, var):
-        pass
         # Write your code here
+        unassignedVariables = self.problem.get_unassigned_variables();
+        
+        if unassignedVariables is not None:
+            for variable in unassignedVariables: 
+                #constraintNeighbors = self.problem.get_neighbor_constraints(variable);
+                #for constraint in constraintNeighbors:
+                    for value in variable._domain:
+                        variable.value = value
+                        if self.is_consistent(variable) is False:
+                            variable._domain.remove(value)
+
+                        variable.has_value = False;    
+                        variable.value = None
+    
 
     def select_unassigned_variable(self) -> Optional[Variable]:
         if self.use_mrv:
@@ -59,6 +72,7 @@ class Solver:
     def mrv(self) -> Optional[Variable]:
         pass
         # Write your code here
+
 
     def is_consistent(self, var: Variable):
         pass
