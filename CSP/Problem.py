@@ -18,6 +18,10 @@ class Problem(ABC):
                 return variable
         return None
 
+    def calculate_degree(self):
+        for variable in self.variables:
+            variable.degree_val = len(self.get_neighbor_constraints(variable))
+
     def calculate_neighbors(self):
         for variable in self.variables:
             for constraint in self.constraints:
