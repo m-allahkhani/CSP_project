@@ -41,18 +41,18 @@ class Solver:
         pass
         # Write your code here
 
-    def forward_check(self, var):
+    def forward_check(self, var, removeValues):
         # Write your code here
         unassignedVariables = self.problem.get_unassigned_variables();
         
         if unassignedVariables is not None:
             for variable in unassignedVariables: 
-                #constraintNeighbors = self.problem.get_neighbor_constraints(variable);
-                #for constraint in constraintNeighbors:
+                    
                     for value in variable._domain:
                         variable.value = value
                         if self.is_consistent(variable) is False:
                             variable._domain.remove(value)
+                            removeValues.append(value)
 
                         variable.has_value = False;    
                         variable.value = None
