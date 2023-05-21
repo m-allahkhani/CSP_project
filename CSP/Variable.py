@@ -15,6 +15,8 @@ class Variable(Generic[T]):
         self._domain = domain
         self.name = name
         self.neighbors = set({})
+        self.mrv_val = None
+        self.degree_val = None
 
     @property
     def value(self) -> T:
