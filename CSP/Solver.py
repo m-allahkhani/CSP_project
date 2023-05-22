@@ -44,30 +44,46 @@ class Solver:
             return True
         for value in var.domain:
             var.value = value
+            removeValues = {}
+            unassignedVariables = self.problem.get_unassigned_variables()
             if self.is_consistent(var) is True:
+                if self.use_forward_check is True: 
+                   self.forward_check(value, removeValues, unassignedVariables);
                 result = self.backtracking()
                 if result is True:
                     return True
+            if self.use_forward_check is True:
+                self.add_remove_values(unassignedVariables,removeValues)
+                
             var._has_value = False
             var.value = None
+            
         return False
 
-    def forward_check(self, var, removeValues):
-        # Write your code here
-        unassignedVariables = self.problem.get_unassigned_variables();
+    def forward_check(self, var, removeValues, unassignedVariables):
         
         if unassignedVariables is not None:
             for variable in unassignedVariables: 
-                    
+                    name_var = variable.name
+                    removeValues[name_var] = []
                     for value in variable._domain:
                         variable.value = value
                         if self.is_consistent(variable) is False:
                             variable._domain.remove(value)
-                            removeValues.append(value)
+                            removeValues[name_var].append(value)
 
-                        variable.has_value = False;    
+                        variable._has_value = False;    
                         variable.value = None
+
+                  
     
+    def add_remove_values(self, variables: list, removeValues):
+
+        for var in variables:
+            name_var = var.name
+            if name_var in removeValues:
+                var.domain.extend(removeValues[name_var])
+
 
     def select_unassigned_variable(self) -> Optional[Variable]:
         if self.use_mrv:
