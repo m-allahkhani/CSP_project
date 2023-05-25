@@ -39,6 +39,7 @@ class Variable(Generic[T]):
     def domain(self) -> List[T]:
         return self._domain
     
+
     def __hash__(self):
         
         return hash((self.name, tuple(self.domain)))

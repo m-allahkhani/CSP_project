@@ -115,14 +115,15 @@ class Solver:
         for value in var._domain:
             conflict = self.count_conflicts(var, value)
             domain_list.append((value, conflict))
+            
         sorted_domain = sorted(domain_list, key = lambda x: x[1], reverse = False)
         return [index[0] for index in sorted_domain]
 
 
     def count_conflicts(self, var:Variable, value):
-        count = 0
-        neighbors = var.neighbors        
+        count = 0 
         var.value = value
+        neighbors = self.problem.get_unassigned_variables()
 
         for neighbor in neighbors:
             for value in neighbor._domain:
@@ -140,7 +141,8 @@ class Solver:
     def order_domain_values(self, var: Variable):
         if self.use_lcv:
             return self.lcv(var)
-        return var._domain
+        else:
+            return var._domain
         
         
 
