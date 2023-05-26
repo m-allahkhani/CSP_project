@@ -42,19 +42,48 @@ class Solver:
         var = self.select_unassigned_variable()
         if var is None:
             return True
-        for value in var.domain:
+        domain_order = self.order_domain_values(var)
+
+        for value in domain_order:
             var.value = value
+            removeValues = {}
+            # unassignedVariables = self.problem.get_unassigned_variables()
+            unassignedVariables=var.neighbors
             if self.is_consistent(var) is True:
+                if self.use_forward_check is True:
+                    self.forward_check(value, removeValues, unassignedVariables)
                 result = self.backtracking()
                 if result is True:
                     return True
+            if self.use_forward_check is True:
+                self.add_remove_values(unassignedVariables, removeValues)
+
             var._has_value = False
             var.value = None
+
         return False
 
-    def forward_check(self, var):
-        pass
-        # Write your code here
+    def forward_check(self, var, removeValues, unassignedVariables):
+
+        if unassignedVariables is not None:
+            for variable in unassignedVariables:
+                name_var = variable.name
+                removeValues[name_var] = []
+                for value in variable._domain:
+                    variable.value = value
+                    if self.is_consistent(variable) is False:
+                        variable._domain.remove(value)
+                        removeValues[name_var].append(value)
+
+                    variable._has_value = False;
+                    variable.value = None
+
+    def add_remove_values(self, variables: list, removeValues):
+
+        for var in variables:
+            name_var = var.name
+            if name_var in removeValues:
+                var.domain.extend(removeValues[name_var])
 
     def select_unassigned_variable(self) -> Optional[Variable]:
         if self.use_mrv:
@@ -62,16 +91,11 @@ class Solver:
         unassigned_variables = self.problem.get_unassigned_variables()
         return unassigned_variables[0] if unassigned_variables else None
 
-    def order_domain_values(self, var: Variable):
-        if self.use_lcv:
-            return self.lcv(var)
-        return var.domain
-
     def mrv(self) -> Optional[Variable]:
         variables = self.problem.get_unassigned_variables()
         for var in variables:
             var.mrv_val = len(var.domain)
-            #variable.degree_val = len(self.get_neighbor_constraints(variable))
+            # variable.degree_val = len(self.get_neighbor_constraints(variable))
         variables = sorted(variables, key=lambda obj: (obj.mrv_val, -obj.degree_val))
         return variables[0] if variables else None
 
@@ -82,7 +106,39 @@ class Solver:
         return True
 
     def lcv(self, var: Variable):
-        pass
-        # Write your code here
+        domain_list = []
+
+        for value in var.domain:
+            conflict = self.count_conflicts(var, value)
+            domain_list.append((value, conflict))
+
+        sorted_domain = sorted(domain_list, key=lambda x: x[1], reverse=False)
+        return [index[0] for index in sorted_domain]
+
+    def count_conflicts(self, var: Variable, value):
+        count = 0
+        var.value = value
+        # neighbors = self.problem.get_unassigned_variables()
+        neighbors = var.neighbors
+        for neighbor in neighbors:
+            for value in neighbor.domain:
+                neighbor.value = value
+                if self.is_consistent(neighbor) is False:
+                    count += 1
+                    break
+            neighbor._has_value = False
+            neighbor.value = None
+
+        var._has_value = False
+        var.value = None
+        return count
+
+    def order_domain_values(self, var: Variable):
+        if self.use_lcv:
+            return self.lcv(var)
+        else:
+            return var.domain
+
+
 
 
