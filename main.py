@@ -2,12 +2,18 @@ from CSP.Solver import Solver
 from SecretSanta.SecretSantaProblem import SecretSantaProblem
 from States.StatesProblem import StatesProblem
 from Sudoku.SudokuProblem import SudokuProblem
+from MagicPotions.MagicProblem import MagicProblem
 
 #
 # states = StatesProblem()
 # s = Solver(states, use_forward_check=True)
 # s.solve()
 # states.print_assignments()
+
+magicProblem = MagicProblem()
+s = Solver(magicProblem, use_forward_check=True)
+s.solve()
+magicProblem.print_assignments()
 
 #
 # secret_santa = SecretSantaProblem(['arman', 'alice', 'nader', 'bob', 'sarah', 'iman'])
@@ -60,8 +66,36 @@ grid = [
 #     [0, 0, 5, 0, 1, 0, 3, 0, 0]
 # ]
 
+grid3 = [
+    [3, 0, 8, 0, 0, 0, 0, 0, 6],
+    [0, 0, 0, 3, 0, 0, 0, 0, 0],
+    [0, 2, 0, 0, 0, 9, 0, 8, 0],
+
+    [0, 0, 4, 0, 1, 8, 0, 3, 0],
+    [1, 5, 0, 0, 0, 0, 2, 0, 0],
+    [0, 0, 2, 0, 0, 4, 0, 9, 0],
+
+    [4, 0, 0, 0, 0, 3, 0, 5, 0],
+    [0, 0, 6, 5, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 7]
+]
+#
+grid4 = [
+  [1, 0, 0,9,0,0,0,0,5,7,0,3],
+  [5,0,0,0,2,0,6,0,0,0,0,0],
+  [0,0,9,0,0,4,0,8,0,0,0,0],
+  [0,0,7,0,4,0,0,1,8,0,5,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,9,0,0,3,0,0,5,0,0,0,0],
+  [0,0,0,0,0,0,3,0,0,0,0,0],
+  [4,0,0,7,0,0,0,0,0,9,0,0],
+  [0,0,1,0,0,0,0,0,0,0,2,0],
+  [0,1,0,0,0,0,0,0,0,0,0,8],
+  [2,0,0,0,0,0,0,0,0,4,0,0],
+  [8,4,0,0,0,0,0,0,6,0,0,1]
+]
 #
 sudoku = SudokuProblem(grid)
-s = Solver(sudoku, use_mrv=False, use_forward_check=True)
+s = Solver(sudoku, use_mrv=False, use_forward_check=True, use_lcv = True)
 s.solve()
 sudoku.print_assignments()
