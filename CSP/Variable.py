@@ -15,6 +15,8 @@ class Variable(Generic[T]):
         self._domain = domain
         self.name = name
         self.neighbors = set({})
+        self.mrv_val = None
+        self.degree_val = None
 
     @property
     def value(self) -> T:
@@ -36,6 +38,11 @@ class Variable(Generic[T]):
     @property
     def domain(self) -> List[T]:
         return self._domain
+    
+
+    def __hash__(self):
+        
+        return hash((self.name, tuple(self.domain)))
 
     @property
     def has_initial_value(self) -> bool:
@@ -48,3 +55,8 @@ class Variable(Generic[T]):
     @domain.setter
     def domain(self, value):
         self._domain = value
+
+    @has_value.setter
+    def has_value(self, value: bool):
+        self._has_value = value
+

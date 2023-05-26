@@ -62,6 +62,6 @@ grid = [
 
 #
 sudoku = SudokuProblem(grid)
-s = Solver(sudoku, use_mrv=False, use_forward_check=True)
+s = Solver(sudoku, use_mrv=False, use_forward_check=True, use_lcv = True)
 s.solve()
 sudoku.print_assignments()
