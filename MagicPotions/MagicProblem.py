@@ -58,7 +58,9 @@ class MagicProblem(Problem):
                             binaryC8, binaryC9, binaryC10]
                             
 
-
+        def print_assignments(self):
+            for variable in self.variables:
+                print(f"{variable.name}'s potion is {variable.value[0]} and {variable.value[1]}")
 
 
 
