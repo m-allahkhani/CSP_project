@@ -32,7 +32,7 @@ class MagicProblem(Problem):
 
         unaryC4  = MagicConstraintUnary(beatrice, 'blue', 0, True)
         unaryC5  = MagicConstraintUnary(beatrice, 'acid', 1, False)
-        unaryC6  = MagicConstraintUnary(beatrice, 'healer', 1, False)
+        #unaryC6  = MagicConstraintUnary(beatrice, 'healer', 1, False)
 
         unaryC7  = MagicConstraintUnary(ignatius, 'purple', 0, False)
         unaryC8  = MagicConstraintUnary(ignatius, 'black', 0, False)
@@ -57,7 +57,7 @@ class MagicProblem(Problem):
         binaryC10 = MagicConstraintBinary([lorenzo, ursula])
 
         self.variables = [aldo, beatrice, lorenzo, ignatius, ursula]
-        self.constraints = [unaryC1, unaryC2, unaryC3, unaryC4, unaryC5, unaryC6, unaryC7, 
+        self.constraints = [unaryC1, unaryC2, unaryC3, unaryC4, unaryC5, unaryC7, 
                             unaryC8, unaryC9, unaryC10, unaryC11, unaryC12, unaryC13, unaryC14,
                             binaryC1, binaryC2, binaryC3, binaryC4, binaryC5, binaryC6, binaryC7,
                             binaryC8, binaryC9, binaryC10]
